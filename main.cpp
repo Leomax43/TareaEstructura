@@ -76,13 +76,13 @@ bool abrirArchivo(string& ruta, vector<vector<int>>& matriz, int& cantNodos) {
     return true;
 }
 
-char pedirLetra() {
+char pedirLetra(int cantNodos) {
     char letra;
     cout << "Ingrese el nodo Destino: ";
     cin >> letra;
 
-    while (letra < 'A' || letra > 'Z') {
-        cout << "Error - Ingrese  una letra valida (A-Z) en mayusculas: ";
+    while (letra < 'A' || letra >= 'A' + cantNodos) {
+        cout << "Error - Ingrese una letra valida entre A y " << (char)('A' + cantNodos - 1) << ": ";
         cin >> letra;
     }
     return letra;
