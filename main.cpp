@@ -5,32 +5,63 @@
 
 using namespace std;
 
-void abrirArchivo(string x){
-    ifstream txt(x);
+bool abrirArchivo(string& ruta, vector<vector<int>>& matriz, int& cantNodos) {
+    ifstream txt(ruta);
     if (!txt.is_open()) {
-        cout << "El archivo no se encuentra en el sistema" << endl;
-        return;
+        cout << "No se encuentra el archivo" << endl;
+        return false;
     }
-    int cantNodos;
-    txt >> cantNodos;
+
+    if (!(txt >> cantNodos)) {
+        cout << "Error al leer el numero de nodos" << endl;
+        return false;
+    }
     txt.ignore(); 
 
-    vector<vector<int>> matriz(cantNodos, vector<int>(cantNodos));
-    string linea;
+    matriz.resize(cantNodos, vector<int>(cantNodos, 0));
 
-    for (int i = 0; i < cantNodos; ++i) {
-        getline(txt, linea);
+    string linea;
+    int i = 0;
+
+    while (getline(txt, linea)) {
+        if (i >= cantNodos) {
+            cout << "Error - mas filas de las esperadas" << endl;
+            return false;
+        }
+
         stringstream ss(linea);
         string valor;
         int j = 0;
+
         while (getline(ss, valor, ',')) {
-            matriz[i][j] = stoi(valor);
+            if (j >= cantNodos) {
+                cout << "Error - mas columnas de las esperadas en la fila " << i + 1 << endl;
+                return false;
+            }
+
+            try {
+                matriz[i][j] = stoi(valor);
+            } catch (invalid_argument&) {
+                cout << "Error - '" << valor << "' no es un numero valido" << endl;
+                return false;
+            }
             ++j;
         }
+
+        if (j != cantNodos) {
+            cout << "Error - la fila " << i + 1 << " no tiene el numero correcto de columnas" << endl;
+            return false;
+        }
+
+        ++i;
+    }
+
+    if (i != cantNodos) {
+        cout << "Error - El numero de filas no coincide con el numero de nodos" << endl;
+        return false;
     }
 
     txt.close();
-
     for (int i=0;i<cantNodos;i++) {
         for (int j=0;j<cantNodos;j++) {
             cout << matriz[i][j]<< " ";
@@ -41,15 +72,39 @@ void abrirArchivo(string x){
         cout << (char)('A' + i) << " ";
     }
     cout << endl;
-    return;
 
+    return true;
+}
+
+char pedirLetra() {
+    char letra;
+    cout << "Ingrese el nodo Destino: ";
+    cin >> letra;
+
+    while (letra < 'A' || letra > 'Z') {
+        cout << "Error - Ingrese  una letra valida (A-Z) en mayusculas: ";
+        cin >> letra;
+    }
+    return letra;
 }
 
 
 
-int main(){
-    abrirArchivo("/workspaces/TareaEstructura/matriz.txt");
-    
+int main() {
+    vector<vector<int>> matriz;
+    int cantNodos;
+
+    string ubiTxt = "/workspaces/TareaEstructura/matriz.txt";
+
+    if (abrirArchivo(ubiTxt, matriz, cantNodos)) {
+        char letraFinal = pedirLetra();
+        cout << "Nodo destino: " << letraFinal << endl;
+
+        int nodoInicio = 0;
+        int nodoFinal = letraFinal - 'A';
+
+        
+    }
     cout <<"ola"<<endl;
     
 
