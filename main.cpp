@@ -5,6 +5,17 @@
 
 using namespace std;
 
+class Nodo {
+public:
+    int id;
+    int distancia;
+
+    Nodo(int _id, int _distancia) {
+        id=_id;
+        distancia=_distancia;
+    }
+};
+
 bool abrirArchivo(string& ruta, vector<vector<int>>& matriz, int& cantNodos) {
     ifstream txt(ruta);
     if (!txt.is_open()) {
@@ -12,11 +23,21 @@ bool abrirArchivo(string& ruta, vector<vector<int>>& matriz, int& cantNodos) {
         return false;
     }
 
-    if (!(txt >> cantNodos)) {
-        cout << "Error al leer el numero de nodos" << endl;
+    string primeraLinea;
+    if (!getline(txt, primeraLinea) || primeraLinea.empty()) {
+        cout << "El archivo esta vacio" << endl;
         return false;
     }
-    txt.ignore(); 
+    try {
+        cantNodos = stoi(primeraLinea);
+    } catch (invalid_argument&) {
+        cout << "la primera linea no es un numero valido" << endl;
+        return false;
+    }
+    if (cantNodos <= 0) {
+        cout << "Error - El numero de nodos debe ser mayor a 0" << endl;
+        return false;
+    }
 
     matriz.resize(cantNodos, vector<int>(cantNodos, 0));
 
@@ -39,12 +60,20 @@ bool abrirArchivo(string& ruta, vector<vector<int>>& matriz, int& cantNodos) {
                 return false;
             }
 
+            int peso;
             try {
-                matriz[i][j] = stoi(valor);
+                peso = stoi(valor);
             } catch (invalid_argument&) {
                 cout << "Error - '" << valor << "' no es un numero valido" << endl;
                 return false;
             }
+
+            if (peso < 0) {
+                cout << "Error - Hay un valor/coste negativo" << endl;
+                return false;
+            }
+
+            matriz[i][j] = peso;
             ++j;
         }
 
@@ -88,7 +117,11 @@ char pedirLetra(int cantNodos) {
     return letra;
 }
 
+void dijkstra(const vector<vector<int>>& matriz, int nodoInicio, int nodoFinal, int cantNodos) {
 
+    cout <<"ola"<<endl;
+
+}
 
 int main() {
     vector<vector<int>> matriz;
@@ -97,15 +130,15 @@ int main() {
     string ubiTxt = "/workspaces/TareaEstructura/matriz.txt";
 
     if (abrirArchivo(ubiTxt, matriz, cantNodos)) {
-        char letraFinal = pedirLetra();
+        char letraFinal = pedirLetra(cantNodos);
         cout << "Nodo destino: " << letraFinal << endl;
 
         int nodoInicio = 0;
         int nodoFinal = letraFinal - 'A';
-
+        dijkstra(matriz, nodoInicio, nodoFinal, cantNodos);
         
     }
-    cout <<"ola"<<endl;
+    
     
 
 
