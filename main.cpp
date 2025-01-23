@@ -1,3 +1,7 @@
+//Maximiliano Alfredo Pastén Nayem
+//20.169.262-8
+//ICCI
+
 #include <iostream>
 #include <fstream>
 #include <vector>
