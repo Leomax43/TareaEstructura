@@ -176,9 +176,6 @@ void dijkstra(const vector<vector<int>>& matriz, int nodoInicio, int nodoFinal, 
         }
         cout << endl;
     }
-
-
-
 }
 
 int main() {
@@ -197,9 +194,6 @@ int main() {
         
     }
     
-    
-
-
     return 0;
 
 }
