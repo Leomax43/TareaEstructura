@@ -12,8 +12,8 @@ public:
     int distancia;
 
     Nodo(int _id, int _distancia) {
-        id=_id;
-        distancia=_distancia;
+        id = _id;
+        distancia = _distancia;
     }
 };
 
@@ -31,7 +31,8 @@ bool abrirArchivo(string& ruta, vector<vector<int>>& matriz, int& cantNodos) {
     }
     try {
         cantNodos = stoi(primeraLinea);
-    } catch (invalid_argument&) {
+    } 
+    catch (invalid_argument&) {
         cout << "la primera linea no es un numero valido" << endl;
         return false;
     }
@@ -64,7 +65,8 @@ bool abrirArchivo(string& ruta, vector<vector<int>>& matriz, int& cantNodos) {
             int peso;
             try {
                 peso = stoi(valor);
-            } catch (invalid_argument&) {
+            } 
+            catch (invalid_argument&) {
                 cout << "Error - '" << valor << "' no es un numero valido" << endl;
                 return false;
             }
@@ -126,7 +128,8 @@ void dijkstra(const vector<vector<int>>& matriz, int nodoInicio, int nodoFinal, 
         return;
     }
 
-    vector<int> distancias(cantNodos, 101); //100 se toma como el valor mas grande por ende 101 se toma como infinito
+    vector<int> distancias(cantNodos, 101); //100 se toma como el valor mas grande 
+                                            //por ende 101 se toma como infinito
     vector<int> padres(cantNodos, -1);
     vector<bool> visitados(cantNodos, false);
 
