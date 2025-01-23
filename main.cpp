@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <sstream>
+#include <queue>
 
 using namespace std;
 
@@ -118,8 +119,62 @@ char pedirLetra(int cantNodos) {
 }
 
 void dijkstra(const vector<vector<int>>& matriz, int nodoInicio, int nodoFinal, int cantNodos) {
+    if (nodoInicio == nodoFinal) {
+        cout << "El nodo de inicio y el nodo de destino son el mismo: " << endl;
+        cout << "El costo mas corto es 0." << endl;
+        cout << "El camino mas corto es: No se mueve"  << endl;
+        return;
+    }
 
-    cout <<"ola"<<endl;
+    vector<int> distancias(cantNodos, 101); //100 se toma como el valor mas grande por ende 101 se toma como infinito
+    vector<int> padres(cantNodos, -1);
+    vector<bool> visitados(cantNodos, false);
+
+    distancias[nodoInicio] = 0;
+
+    queue<Nodo> q;
+    q.push(Nodo(nodoInicio, 0));
+
+    while (!q.empty()) {
+        Nodo actual = q.front();
+        q.pop();
+
+        if (visitados[actual.id]) continue;
+        visitados[actual.id] = true;
+
+        for (int vecino = 0; vecino < cantNodos; ++vecino) {
+            int peso = matriz[actual.id][vecino];
+            if (peso > 0) {
+                int nuevaDistancia = distancias[actual.id] + peso;
+                if (nuevaDistancia < distancias[vecino]) {
+                    distancias[vecino] = nuevaDistancia;
+                    padres[vecino] = actual.id;
+                    q.push(Nodo(vecino, nuevaDistancia));
+                }
+            }
+        }
+    }
+
+    if (distancias[nodoFinal] == 101) {
+        cout << "No hay un camino desde " << (char)('A' + nodoInicio)
+             << " hasta " << (char)('A' + nodoFinal)  << endl;
+    } else {
+        cout << "El costo mas corto desde " << (char)('A' + nodoInicio)
+             << " hasta " << (char)('A' + nodoFinal) << " es " << distancias[nodoFinal]  << endl;
+
+        vector<int> camino;
+        for (int v = nodoFinal; v != -1; v = padres[v]) {
+            camino.push_back(v);
+        }
+
+        cout << "El camino mas corto es: ";
+        for (int i = camino.size() - 1; i >= 0; --i) {
+            cout << (char)('A' + camino[i]) << " ";
+        }
+        cout << endl;
+    }
+
+
 
 }
 
